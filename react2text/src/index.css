@@ -1,0 +1,142 @@
+/* src/index.css */
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}
+
+/* Custom styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-control {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.2s ease;
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+.form-control::placeholder {
+  color: #6b7280 !important;
+  opacity: 1;
+}
+
+.form-control:disabled {
+  background-color: #f3f4f6 !important;
+  color: #6b7280 !important;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #bfdbfe;
+}
+
+.progress {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background-color: #3b82f6;
+  transition: width 0.3s ease;
+}
+
+/* Garantir que checkboxes sejam visíveis */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.25rem;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #2563eb;
+}
+
+/* Melhorar a visibilidade dos labels */
+label {
+  color: #374151 !important;
+}
+
+.form-label {
+  color: #1e40af !important;
+  font-weight: 600 !important;
+}
+
+/* Para os modais - garantir texto visível nos inputs */
+.modal input,
+.modal textarea,
+.modal select {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+.modal input::placeholder,
+.modal textarea::placeholder {
+  color: #6b7280 !important;
+}
