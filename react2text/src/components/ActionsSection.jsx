@@ -1,4 +1,6 @@
 // src/components/ActionsSection.jsx
+import { useState } from "react";
+
 const ActionsSection = ({
   isFormValid,
   abordadoFile,
@@ -9,6 +11,8 @@ const ActionsSection = ({
   onResetLocal,
   onResetEquipe,
 }) => {
+  const [resetFeedback, setResetFeedback] = useState("");
+
   const generateText = (data) => {
     const apelidoFinal = data.naoAplicaApelido
       ? "Não se aplica"
@@ -53,6 +57,18 @@ const ActionsSection = ({
       .catch((err) => console.error("Erro ao copiar texto:", err));
   };
 
+  const shareViaWhatsApp = () => {
+    const text = generateText(formData);
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const handleResetWithFeedback = (resetFunction, fieldName) => {
+    resetFunction();
+    setResetFeedback(`${fieldName} limpo com sucesso!`);
+    setTimeout(() => setResetFeedback(""), 2000);
+  };
+
   return (
     <div className="card bg-white bg-opacity-95 rounded-xl shadow-lg border border-blue-200 mb-6">
       <div className="card-body p-6">
@@ -60,19 +76,25 @@ const ActionsSection = ({
           4. Ações
         </h5>
 
+        {resetFeedback && (
+          <div className="mb-4 p-2 bg-green-100 text-green-800 rounded text-center">
+            {resetFeedback}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <button
             onClick={copyToClipboard}
             disabled={!isFormValid}
-            className="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed mobile-full"
           >
             <span className="mr-2">📋</span> Copiar para Área de Transferência
           </button>
 
           <button
-            onClick={onWhatsApp}
+            onClick={shareViaWhatsApp}
             disabled={!isFormValid || !abordadoFile}
-            className="btn bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed mobile-full"
           >
             <span className="mr-2">💬</span> Compartilhar via WhatsApp
           </button>
@@ -80,22 +102,24 @@ const ActionsSection = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <button
-            onClick={onResetAntecedentes}
-            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors"
+            onClick={() =>
+              handleResetWithFeedback(onResetAntecedentes, "Antecedentes")
+            }
+            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors mobile-full"
           >
             Limpar Antecedentes
           </button>
 
           <button
-            onClick={onResetLocal}
-            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors"
+            onClick={() => handleResetWithFeedback(onResetLocal, "Local")}
+            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors mobile-full"
           >
             Limpar Local
           </button>
 
           <button
-            onClick={onResetEquipe}
-            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors"
+            onClick={() => handleResetWithFeedback(onResetEquipe, "Equipe")}
+            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors mobile-full"
           >
             Limpar Equipe
           </button>

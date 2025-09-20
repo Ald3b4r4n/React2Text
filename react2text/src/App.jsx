@@ -11,6 +11,7 @@ import Toast from "./components/Toast";
 import { useFormData } from "./hooks/useFormData";
 import { useOcr } from "./hooks/useOcr";
 import { useImageProcessing } from "./hooks/useImageProcessing";
+import "./styles/Responsive.css";
 
 function App() {
   const {
@@ -34,6 +35,14 @@ function App() {
     processingProgress,
   } = useOcr(currentFile, updateField, setOcrRawText);
 
+  const [resetFeedback, setResetFeedback] = useState("");
+
+  const handleResetWithFeedback = (resetFunction, fieldName) => {
+    resetFunction();
+    setResetFeedback(`${fieldName} limpo com sucesso!`);
+    setTimeout(() => setResetFeedback(""), 2000);
+  };
+
   const { handleFileSelect, documentPreviewUrl, abordadoPreviewUrl } =
     useImageProcessing(setCurrentFile, setAbordadoFile);
 
@@ -44,6 +53,41 @@ function App() {
     message: "",
     type: "info",
   });
+
+  // ✅ REGISTRO DO SERVICE WORKER
+  useEffect(() => {
+    const registerServiceWorker = async () => {
+      if ("serviceWorker" in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register("/sw.js");
+          console.log("✅ Service Worker registrado: ", registration.scope);
+
+          // Verifica se há uma nova versão disponível
+          registration.addEventListener("updatefound", () => {
+            const newWorker = registration.installing;
+            console.log("🔄 Nova versão do Service Worker encontrada");
+
+            newWorker.addEventListener("statechange", () => {
+              if (newWorker.state === "installed") {
+                console.log("📦 Nova versão instalada");
+                // Pode mostrar um toast para o usuário atualizar a página
+                showToast("Nova versão disponível! Atualize a página.", "info");
+              }
+            });
+          });
+        } catch (error) {
+          console.error("❌ Falha no registro do Service Worker:", error);
+        }
+      }
+    };
+
+    // Registra apenas em produção
+    if (process.env.NODE_ENV === "production") {
+      registerServiceWorker();
+    } else {
+      console.log("⚡ Modo desenvolvimento: Service Worker não registrado");
+    }
+  }, []);
 
   // Função para resetar todos os campos
   const resetAllFields = () => {
@@ -207,9 +251,7 @@ function App() {
 
       {activeModal === "whatsapp-instructions" && (
         <WhatsAppInstructionsModal
-          onContinue={() => {
-            closeModal();
-          }}
+          onContinue={shareViaWhatsApp}
           onClose={closeModal}
         />
       )}
