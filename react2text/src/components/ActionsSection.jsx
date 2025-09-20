@@ -59,8 +59,29 @@ const ActionsSection = ({
 
   const shareViaWhatsApp = () => {
     const text = generateText(formData);
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(whatsappUrl, "_blank");
+    const phoneNumber = "";
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
+
+    if (abordadoFile && navigator.share) {
+      navigator
+        .share({
+          title: "Abordagem Policial",
+          text: text,
+          files: [abordadoFile],
+        })
+        .then(() => console.log("Compartilhado com sucesso"))
+        .catch((error) => {
+          console.log(
+            "Falha ao compartilhar com imagem, usando fallback de texto:",
+            error
+          );
+          window.open(url, "_blank");
+        });
+    } else {
+      window.open(url, "_blank");
+    }
+
+    onWhatsApp();
   };
 
   const handleResetWithFeedback = (resetFunction, fieldName) => {
@@ -71,32 +92,40 @@ const ActionsSection = ({
 
   return (
     <div className="card bg-white bg-opacity-95 rounded-xl shadow-lg border border-blue-200 mb-6">
-      <div className="card-body p-6">
+      {/* Padding responsivo: p-4 em telas pequenas, p-6 em telas médias e maiores */}
+      <div className="card-body p-4 md:p-6">
         <h5 className="card-title text-blue-900 font-semibold text-center text-xl mb-4 pb-2 border-b-2 border-blue-400 flex items-center justify-center gap-2">
           4. Ações
         </h5>
 
         {resetFeedback && (
-          <div className="mb-4 p-2 bg-green-100 text-green-800 rounded text-center">
+          <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-lg text-center">
             {resetFeedback}
           </div>
         )}
 
+        {/* O grid já estava responsivo, o que é ótimo! */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <button
             onClick={copyToClipboard}
             disabled={!isFormValid}
-            className="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed mobile-full"
+            className="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            <span className="mr-2">📋</span> Copiar para Área de Transferência
+            <span className="mr-2">📋</span>
+            <span className="hidden md:inline">
+              Copiar para Área de Transferência
+            </span>
+            <span className="md:hidden">Copiar Texto</span>
           </button>
 
           <button
             onClick={shareViaWhatsApp}
             disabled={!isFormValid || !abordadoFile}
-            className="btn bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed mobile-full"
+            className="btn bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            <span className="mr-2">💬</span> Compartilhar via WhatsApp
+            <span className="mr-2">💬</span>
+            <span className="hidden md:inline">Compartilhar via WhatsApp</span>
+            <span className="md:hidden">WhatsApp</span>
           </button>
         </div>
 
@@ -105,22 +134,25 @@ const ActionsSection = ({
             onClick={() =>
               handleResetWithFeedback(onResetAntecedentes, "Antecedentes")
             }
-            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors mobile-full"
+            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors flex items-center justify-center"
           >
+            <span className="md:hidden mr-1">🗑️</span>
             Limpar Antecedentes
           </button>
 
           <button
             onClick={() => handleResetWithFeedback(onResetLocal, "Local")}
-            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors mobile-full"
+            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors flex items-center justify-center"
           >
+            <span className="md:hidden mr-1">🗑️</span>
             Limpar Local
           </button>
 
           <button
             onClick={() => handleResetWithFeedback(onResetEquipe, "Equipe")}
-            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors mobile-full"
+            className="btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors flex items-center justify-center"
           >
+            <span className="md:hidden mr-1">🗑️</span>
             Limpar Equipe
           </button>
         </div>

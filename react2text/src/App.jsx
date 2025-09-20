@@ -11,7 +11,7 @@ import Toast from "./components/Toast";
 import { useFormData } from "./hooks/useFormData";
 import { useOcr } from "./hooks/useOcr";
 import { useImageProcessing } from "./hooks/useImageProcessing";
-import "./styles/Responsive.css";
+import "./styles/Responsive.css"; // A importação já estava correta
 
 function App() {
   const {
@@ -62,7 +62,6 @@ function App() {
           const registration = await navigator.serviceWorker.register("/sw.js");
           console.log("✅ Service Worker registrado: ", registration.scope);
 
-          // Verifica se há uma nova versão disponível
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             console.log("🔄 Nova versão do Service Worker encontrada");
@@ -70,7 +69,6 @@ function App() {
             newWorker.addEventListener("statechange", () => {
               if (newWorker.state === "installed") {
                 console.log("📦 Nova versão instalada");
-                // Pode mostrar um toast para o usuário atualizar a página
                 showToast("Nova versão disponível! Atualize a página.", "info");
               }
             });
@@ -81,7 +79,6 @@ function App() {
       }
     };
 
-    // Registra apenas em produção
     if (process.env.NODE_ENV === "production") {
       registerServiceWorker();
     } else {
@@ -89,7 +86,6 @@ function App() {
     }
   }, []);
 
-  // Função para resetar todos os campos
   const resetAllFields = () => {
     const fieldsToReset = {
       abordado: "",
@@ -155,11 +151,12 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#020024] via-[#161640] to-[#00d4ff] text-white pt-16 pb-8">
-      <nav className="fixed top-0 left-0 right-0 bg-[#020024] bg-opacity-90 backdrop-blur-md shadow-lg border-b border-[#79bbff] z-50 h-16 flex items-center px-4">
+      <nav className="fixed top-0 left-0 right-0 bg-[#020024] bg-opacity-90 backdrop-blur-md shadow-lg border-b border-[#79bbff] z-50 h-16 flex items-center px-4 nav-mobile">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2 font-bold text-xl">
+          <div className="flex items-center gap-2 font-bold text-xl nav-title-mobile">
             <span className="text-[#79bbff] text-2xl">🛡️</span>
-            Doc2text
+            <span className="hidden sm:inline">Doc2text</span>
+            <span className="sm:hidden">D2T</span>
           </div>
           <a
             href="https://geradordeproativas.vercel.app/"
@@ -167,12 +164,15 @@ function App() {
             rel="noopener noreferrer"
             className="btn btn-outline-light text-[#79bbff] border-[#79bbff] hover:bg-[#79bbff] hover:text-[#020024] text-sm px-3 py-1 transition-all duration-300"
           >
-            <span className="mr-1">⚡</span> Gerador de Proativas
+            <span className="mr-1">⚡</span>
+            <span className="hidden sm:inline">Gerador de Proativas</span>
+            <span className="sm:hidden">Proativas</span>
           </a>
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 max-w-4xl mt-2 pt-2">
+      {/* Container principal com padding responsivo */}
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl mt-2 pt-2">
         <DocumentAnalysis
           onFileSelect={handleDocumentFileSelect}
           previewUrl={documentPreviewUrl}
@@ -220,7 +220,7 @@ function App() {
           </button>
         </div>
 
-        <footer className="text-center text-gray-300 text-sm mt-8">
+        <footer className="text-center text-gray-300 text-sm mt-8 footer-mobile">
           Desenvolvido por CB Antônio Rafael | versão React 1.0
           <div className="mt-2">
             <a
@@ -251,7 +251,9 @@ function App() {
 
       {activeModal === "whatsapp-instructions" && (
         <WhatsAppInstructionsModal
-          onContinue={shareViaWhatsApp}
+          onContinue={() => {
+            closeModal();
+          }}
           onClose={closeModal}
         />
       )}

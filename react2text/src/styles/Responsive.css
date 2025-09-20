@@ -1,81 +1,286 @@
-/* Responsividade Mobile */
+/* src/styles/Responsive.css */
+
+/* Reset e base para evitar overflow e garantir cálculo consistente */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden; /* Evita rolagem horizontal quando algo tenta ultrapassar a largura */
+}
+
+/* Estilos Globais */
+body {
+  font-size: 16px; /* base consistente e evita zoom no iOS quando combinado com inputs 16px */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Helpers gerais para grupos com botões ao lado de inputs (Bootstrap-like) */
+.input-group,
+.d-flex,
+.row {
+  gap: 0.5rem; /* respiro entre controles quando quebram de linha */
+}
+
+/* ------------------------------ */
+/*        MOBILE <= 768px         */
+/* ------------------------------ */
 @media (max-width: 768px) {
   .container {
-    padding: 0 12px;
+    padding-left: 1rem; /* 16px */
+    padding-right: 1rem; /* 16px */
+    max-width: 100%;
+  }
+
+  .card {
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    max-width: 100%;
+    overflow: hidden; /* protege contra conteúdo extrapolando */
   }
 
   .card-body {
-    padding: 1rem;
+    padding: 1rem; /* reduz padding interno em telas menores */
   }
 
-  .btn {
-    padding: 10px 16px;
-    font-size: 14px;
+  /* Faz grupos com input + botão empilharem corretamente (Bootstrap-like) */
+  .input-group,
+  .d-flex,
+  .row {
+    flex-wrap: wrap !important; /* permite quebrar linha */
   }
 
-  .form-control {
-    font-size: 16px; /* Previne zoom no iOS */
-    height: 44px;
+  /* Campos “de linha”: altura fixa confortável */
+  .form-control:not(textarea),
+  .form-select,
+  input[type="text"],
+  input[type="number"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="email"],
+  select {
+    font-size: 16px; /* previne zoom no iOS */
+    height: 48px;
+    padding: 12px;
+    min-width: 0; /* importante em flex: permite encolher */
+    width: 100%; /* ocupa a linha quando empilhar */
   }
 
-  /* Grid responsivo */
-  .grid-cols-1 {
-    grid-template-columns: 1fr;
+  /* Se usar Bootstrap input-group, força o campo a ocupar a linha toda ao quebrar */
+  .input-group > .form-control {
+    flex-basis: 100%;
   }
 
-  /* Espaçamento reduzido */
-  .gap-4 {
-    gap: 1rem;
-  }
-
-  /* Texto menor */
-  .text-xl {
-    font-size: 1.25rem;
-  }
-
-  /* Melhorias específicas para mobile */
-  .mobile-stack {
-    flex-direction: column;
-  }
-
-  .mobile-full {
+  /* Botões ao lado de inputs viram largura total quando empilhados */
+  .input-group > .btn,
+  .d-flex > .btn,
+  .row > .btn {
+    flex: 1 1 100%;
     width: 100%;
+    max-width: 100%;
   }
 
-  .mobile-text-center {
-    text-align: center;
+  /* Regras específicas (opcionais) para os botões citados */
+  .btn-bnmp,
+  .btn-consultar-placa {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block;
   }
 
-  .mobile-p-2 {
-    padding: 0.5rem;
-  }
-}
-
-/* iPhone pequeno */
-@media (max-width: 375px) {
   .btn {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 48px; /* área de toque */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal; /* permite quebra de linha */
+    word-break: break-word;
+    max-width: 100%;
   }
 
-  .text-sm {
-    font-size: 11px;
+  /* TEXTAREA: sem altura fixa, com altura mínima confortável e redimensionamento vertical */
+  textarea,
+  textarea.form-control {
+    font-size: 16px; /* evita zoom no iOS */
+    height: auto;
+    min-height: 160px; /* ajuste conforme preferir (ex.: 200px) */
+    padding: 12px;
+    line-height: 1.4;
+    width: 100%;
+    min-width: 0;
+    resize: vertical; /* permite o usuário aumentar */
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
-  .mobile-small-text {
-    font-size: 0.8rem;
+  /* Títulos e textos grandes ligeiramente menores no mobile */
+  .text-xl {
+    font-size: 1.1rem;
+  }
+
+  h5.card-title {
+    font-size: 1.2rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Imagens sempre dentro do container */
+  .image-preview {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 8px;
+  }
+
+  /* Em grids, força colunas a ocuparem 100% em telas pequenas */
+  [class*="col-"] {
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Ajustes do header fixo */
+  .nav-mobile {
+    height: 60px;
+    padding: 0 1rem;
+  }
+
+  .nav-title-mobile {
+    font-size: 18px;
+  }
+
+  /* Footer (caso precise) */
+  .footer-mobile {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* ------------------------------ */
+  /* Linha específica: Nome Abordado (via classe) */
+  /* Aplique a classe no wrapper que contém input + botões, se quiser controle explícito */
+  .linha-nome-abordado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .linha-nome-abordado .form-control {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+  }
+  .linha-nome-abordado .btn {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+  /* Variante: dois botões lado a lado (50% cada) */
+  .linha-nome-abordado.two-buttons-side .btn {
+    flex: 1 1 calc(50% - 0.25rem);
+    width: calc(50% - 0.25rem);
+  }
+  /* Variante: manter tudo na mesma linha, priorizando o input */
+  .linha-nome-abordado.inline {
+    flex-wrap: nowrap;
+  }
+  .linha-nome-abordado.inline .form-control {
+    flex: 1 1 auto; /* ocupa o espaço disponível */
+    min-width: 0;
+  }
+  .linha-nome-abordado.inline .btn {
+    flex: 0 0 auto; /* não encolhe */
+    white-space: nowrap;
+  }
+
+  /* ------------------------------ */
+  /* Correção AUTOMÁTICA para seu markup (Tailwind): 
+     wrapper "flex gap-2" com input + dois botões no mesmo nível.
+     Não precisa alterar o JSX. */
+  .card-body .flex.gap-2 {
+    /* Só aplicaremos wrap quando houver input + 2 botões, usando :has (navegadores modernos) */
+  }
+  .card-body .flex.gap-2:has(> .form-control + .btn + .btn) {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .card-body .flex.gap-2:has(> .form-control + .btn + .btn) > .form-control {
+    flex: 1 1 100% !important;
+    width: 100%;
+    min-width: 0;
+  }
+  .card-body .flex.gap-2:has(> .form-control + .btn + .btn) > .btn {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+  /* Se quiser os dois botões lado a lado (50/50) sem mexer no JSX,
+     basta adicionar a classe "two-buttons-side" no wrapper */
+  .card-body
+    .flex.gap-2.two-buttons-side:has(> .form-control + .btn + .btn)
+    > .btn {
+    flex: 1 1 calc(50% - 0.25rem);
+    width: calc(50% - 0.25rem);
+  }
+
+  /* ------------------------------ */
+  /* Fallback AUTOMÁTICO adicional: se o botão tiver a classe .btn-bnmp */
+  :is(div, section, form, fieldset):has(.btn-bnmp) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  :is(div, section, form, fieldset):has(.btn-bnmp) .form-control {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+  }
+  :is(div, section, form, fieldset):has(.btn-bnmp) .btn {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
-/* Melhorias de toque para mobile */
+/* ------------------------------ */
+/*    Telas muito pequenas <=375px */
+/* ------------------------------ */
+@media (max-width: 375px) {
+  .container {
+    padding-left: 0.75rem; /* 12px */
+    padding-right: 0.75rem; /* 12px */
+  }
+
+  .card-body {
+    padding: 0.75rem;
+  }
+
+  .btn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  h5.card-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ------------------------------ */
+/*  Melhorias para dispositivos de toque */
+/* ------------------------------ */
 @media (hover: none) and (pointer: coarse) {
   .btn {
-    min-height: 44px; /* Tamanho mínimo para toque */
+    /* Garante que botões tenham uma área de toque mínima de 48x48 pixels */
+    min-height: 48px;
+    min-width: 48px;
   }
+}
 
-  input,
-  select,
-  textarea {
-    font-size: 16px; /* Previne zoom no iOS */
-  }
+/* Classe opcional para a área “Texto Extraído do Documento”
+   Use junto à sua textarea: <textarea class="form-control textarea-ocr"> */
+.textarea-ocr {
+  min-height: 220px; /* ajuste livre (ex.: 240–300px conforme o OCR) */
 }

@@ -44,7 +44,9 @@ const TutorialModal = ({ onClose }) => {
                   <li>
                     Verifique e corrija os dados extraídos automaticamente
                   </li>
-                  <li>Use os botões de lápis para editar campos específicos</li>
+                  <li>
+                    Use os botões de "Corrigir", para editar campos específicos
+                  </li>
                   <li>Consulte o BNMP para verificar mandados de prisão</li>
                   <li>
                     Preencha informações adicionais como veículo ou tornozeleira
