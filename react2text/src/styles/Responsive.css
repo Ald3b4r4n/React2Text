@@ -1,0 +1,81 @@
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .form-control {
+    font-size: 16px; /* Previne zoom no iOS */
+    height: 44px;
+  }
+
+  /* Grid responsivo */
+  .grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Espaçamento reduzido */
+  .gap-4 {
+    gap: 1rem;
+  }
+
+  /* Texto menor */
+  .text-xl {
+    font-size: 1.25rem;
+  }
+
+  /* Melhorias específicas para mobile */
+  .mobile-stack {
+    flex-direction: column;
+  }
+
+  .mobile-full {
+    width: 100%;
+  }
+
+  .mobile-text-center {
+    text-align: center;
+  }
+
+  .mobile-p-2 {
+    padding: 0.5rem;
+  }
+}
+
+/* iPhone pequeno */
+@media (max-width: 375px) {
+  .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .text-sm {
+    font-size: 11px;
+  }
+
+  .mobile-small-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Melhorias de toque para mobile */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    min-height: 44px; /* Tamanho mínimo para toque */
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Previne zoom no iOS */
+  }
+}
