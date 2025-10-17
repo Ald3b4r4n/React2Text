@@ -77,6 +77,7 @@ const ApproachData = ({
     if (!ocrText) return;
 
     const platePatterns = [/[A-Z]{3}[-\s]?\d{4}/, /[A-Z]{3}\d[A-Z]\d{2}/];
+    let plateFound = false;
 
     for (const pattern of platePatterns) {
       const match = ocrText.match(pattern);
@@ -87,9 +88,16 @@ const ApproachData = ({
           .replace(/([A-Z]{3})(\d{4})/, "$1-$2");
 
         onFieldChange("veiculoPlaca", plate);
+        // Só marca "Sim" se uma placa válida foi encontrada
         handleVeiculoChange("veiculoCheck", true);
+        plateFound = true;
         break;
       }
+    }
+
+    // Se nenhuma placa foi encontrada, mantém "não se aplica"
+    if (!plateFound) {
+      handleVeiculoChange("naoAplicaVeiculo", true);
     }
   };
 
@@ -356,7 +364,7 @@ const ApproachData = ({
               )}
             </div>
 
-            <div>
+            <div className="overflow-hidden">
               <label className="form-label text-blue-900 font-medium block mb-2">
                 Está de veículo?
               </label>
@@ -391,29 +399,31 @@ const ApproachData = ({
                     <label className="form-label text-blue-900 font-medium">
                       Placa:
                     </label>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <input
                         value={formData.veiculoPlaca}
                         onChange={(e) =>
                           onFieldChange("veiculoPlaca", e.target.value)
                         }
-                        className="form-control flex-1 p-2 border border-gray-300 rounded-lg text-black bg-white"
+                        className="form-control flex-1 p-2 border border-gray-300 rounded-lg text-black bg-white min-w-0"
                       />
-                      <button
-                        onClick={() => onEditField("veiculoPlaca")}
-                        className="btn bg-green-900 hover:bg-green-600 text-white p-2 rounded-lg transition-colors"
-                      >
-                        Corrigir
-                      </button>
-                      <button
-                        onClick={() => {
-                          copyToClipboard(formData.veiculoPlaca);
-                          onSearchPlate();
-                        }}
-                        className="btn bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors"
-                      >
-                        <span className="mr-1">🔍</span> Consultar
-                      </button>
+                      <div className="flex gap-2 flex-shrink-0">
+                        <button
+                          onClick={() => onEditField("veiculoPlaca")}
+                          className="btn bg-green-900 hover:bg-green-600 text-white px-3 py-2 rounded-lg transition-colors text-sm whitespace-nowrap"
+                        >
+                          Corrigir
+                        </button>
+                        <button
+                          onClick={() => {
+                            copyToClipboard(formData.veiculoPlaca);
+                            onSearchPlate();
+                          }}
+                          className="btn bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition-colors text-sm whitespace-nowrap"
+                        >
+                          <span className="mr-1">🔍</span> Consultar
+                        </button>
+                      </div>
                     </div>
                   </div>
 

@@ -6,7 +6,7 @@ const MAX_DIMENSION = 1200;
 const OCR_API_KEY = "K82112819888957";
 const OCR_TIMEOUT = 10000;
 
-export const useOcr = (currentFile, updateField, setOcrRawText) => {
+export const useOcr = (currentFile, updateField, setOcrRawText, onTimeout) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingProgress, setProcessingProgress] = useState(0);
 
@@ -34,6 +34,14 @@ export const useOcr = (currentFile, updateField, setOcrRawText) => {
       setProcessingProgress(100);
     } catch (error) {
       console.error("Erro no processamento:", error);
+
+      // Verifica se é erro de timeout
+      if (error.message.includes("OCR demorou muito tempo para responder")) {
+        if (onTimeout) {
+          onTimeout();
+        }
+      }
+
       throw error;
     } finally {
       setIsProcessing(false);
@@ -417,10 +425,14 @@ export const useOcr = (currentFile, updateField, setOcrRawText) => {
     updateField("dn", dn);
     updateField("veiculoPlaca", placa);
 
-    // Ativa campos de veículo se placa for encontrada
-    if (placa && placa !== "Vá em Corrigir") {
+    // Ativa campos de veículo APENAS se placa for encontrada (não é "Vá em Corrigir")
+    if (placa && placa !== "Vá em Corrigir" && placa.trim() !== "") {
       updateField("veiculoCheck", true);
       updateField("naoAplicaVeiculo", false);
+    } else {
+      // Se não há placa válida, mantém como "não se aplica"
+      updateField("veiculoCheck", false);
+      updateField("naoAplicaVeiculo", true);
     }
   };
 

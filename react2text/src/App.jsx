@@ -7,6 +7,7 @@ import ActionsSection from "./components/ActionsSection";
 import CorrectionModal from "./components/Modals/CorrectionModal";
 import WhatsAppInstructionsModal from "./components/Modals/WhatsAppInstructionsModal";
 import TutorialModal from "./components/Modals/TutorialModal";
+import ServerTimeoutModal from "./components/Modals/ServerTimeoutModal";
 import Toast from "./components/Toast";
 import { useFormData } from "./hooks/useFormData";
 import { useOcr } from "./hooks/useOcr";
@@ -33,7 +34,9 @@ function App() {
     processPastedText,
     isProcessing,
     processingProgress,
-  } = useOcr(currentFile, updateField, setOcrRawText);
+  } = useOcr(currentFile, updateField, setOcrRawText, () =>
+    openModal("server-timeout")
+  );
 
   const [resetFeedback, setResetFeedback] = useState("");
 
@@ -259,6 +262,10 @@ function App() {
       )}
 
       {activeModal === "tutorial" && <TutorialModal onClose={closeModal} />}
+
+      {activeModal === "server-timeout" && (
+        <ServerTimeoutModal onClose={closeModal} />
+      )}
 
       {/* Toast Notification */}
       <Toast
