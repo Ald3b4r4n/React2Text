@@ -168,7 +168,8 @@ Quando o servidor OCR está indisponível:
 
 ### OCR.space API
 ```javascript
-// Configuração automática
+// Configuração automática, não tem problema expor esta API Key, ela é meio que descartável, pode conseguir a sua em
+//https://ocr.space/
 const OCR_API_KEY = "K82112819888957";
 const OCR_TIMEOUT = 10000; // 10 segundos
 ```
