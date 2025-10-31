@@ -130,7 +130,7 @@ function App() {
   };
 
   const openBnmpPortal = () => {
-    window.open("https://portalbnmp.cnj.jus.br/#/pesquisa-peca", "_blank");
+    window.open("https://portalbnmp.pdpj.jus.br/#/pesquisa-peca", "_blank");
   };
 
   const openPlacaPortal = () => {
