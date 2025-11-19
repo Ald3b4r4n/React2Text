@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { extractAndFillFields } from "../utils/dataExtraction";
+import { withValidation } from "../utils/validationWrapper";
 
 const MAX_FILE_SIZE_KB = 1024;
 const MAX_DIMENSION = 1200;
@@ -33,8 +34,15 @@ export const useOcr = (currentFile, updateField, setOcrRawText, onTimeout) => {
 
       // Exibe o JSON completo no campo "Texto Extraído"
       setOcrRawText(JSON.stringify(fullJson, null, 2));
-      // Passa o JSON completo para extração (agora suporta JSON + fallback de texto)
-      extractAndFillFields(fullJson, updateField);
+      
+      // ===== SISTEMA DE VALIDAÇÃO AVANÇADO ATIVADO =====
+      // Aplica validação automática: CPF, Placa, Renavam, Data
+      // Fallback para padrões universais se validação falhar
+      // Formatação automática de dados brasileiros
+      const extractWithValidation = withValidation(extractAndFillFields);
+      extractWithValidation(fullJson, updateField);
+      console.log('✅ Sistema de validação avançado aplicado');
+      // =================================================
       setProcessingProgress(100);
     } catch (error) {
       console.error("Erro no processamento:", error);
