@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const MAX_FILE_SIZE_KB = 1024;
 const MAX_DIMENSION = 1200;
-const OCR_API_KEY = "K82112819888957";
+const OCR_API_KEY = "K88430917688957";
 const OCR_TIMEOUT = 10000;
 
 export const useOcr = (currentFile, updateField, setOcrRawText, onTimeout) => {
