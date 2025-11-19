@@ -1,6 +1,48 @@
 // src/utils/dataExtraction.js
 
 /**
+ * Converte texto plano para o formato JSON do OCR.space
+ * Permite usar a mesma lógica de extração para texto colado
+ */
+function convertTextToOcrJson(text) {
+  const lines = text.split('\n').filter(line => line.trim().length > 0);
+  
+  const textOverlayLines = lines.map((lineText, index) => {
+    const words = lineText.trim().split(/\s+/).map((wordText, wordIndex) => ({
+      WordText: wordText,
+      Left: wordIndex * 50, // Posição simulada
+      Top: index * 20,      // Posição simulada (espaçamento vertical)
+      Height: 20,
+      Width: wordText.length * 10
+    }));
+    
+    return {
+      LineText: lineText.trim(),
+      Words: words,
+      MaxHeight: 20,
+      MinTop: index * 20
+    };
+  });
+  
+  return {
+    ParsedResults: [{
+      TextOverlay: {
+        Lines: textOverlayLines,
+        HasOverlay: true
+      },
+      TextOrientation: "0",
+      FileParseExitCode: 1,
+      ParsedText: text,
+      ErrorMessage: "",
+      ErrorDetails: ""
+    }],
+    OCRExitCode: 1,
+    IsErroredOnProcessing: false,
+    ProcessingTimeInMilliseconds: "0"
+  };
+}
+
+/**
  * Main extraction function - accepts either JSON object or plain text
  */
 export const extractAndFillFields = (input, updateField) => {
@@ -12,8 +54,10 @@ export const extractAndFillFields = (input, updateField) => {
   if (isJsonInput) {
     extractFromJson(input, updateField);
   } else {
-    // Fallback to text-based extraction (for pasted text)
-    extractFromText(input, updateField);
+    // Converter texto para formato JSON e usar extração JSON
+    console.log('📝 Texto colado detectado - convertendo para formato JSON');
+    const syntheticJson = convertTextToOcrJson(input);
+    extractFromJson(syntheticJson, updateField);
   }
 };
 
